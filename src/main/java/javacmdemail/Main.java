@@ -14,13 +14,36 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Main main = new Main();
-		main.sendMail();
+		
+		String fromUsername = null;
+		String password = null;
+		String toEmailId = null;
+		String subject = null;
+		String body = null;
+		try{
+			String[] inputArray = args[0].split("#"); 
+			
+			fromUsername = inputArray[0];
+			password = inputArray[1];
+			toEmailId = inputArray[2];
+			subject = inputArray[3];
+			body = inputArray[4];
+		
+			Main main = new Main();
+			main.sendMail(fromUsername, password, toEmailId, subject, body);
+			
+		}catch(Exception e){
+			System.out.println("Invalid input " + e.getMessage());
+
+		}	
+		
 	}
 	
-	void sendMail(){
-		final String username = "abc@gmail.com";
-		final String password = "abc123";
+	void sendMail(String fromUsername, String fromUserPassword, String toEmailId, String subject, String body){
+		
+		try{
+		final String username = fromUsername;
+		final String password = fromUserPassword;
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -38,19 +61,19 @@ public class Main {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("abc@gmail.com"));
+			message.setFrom(new InternetAddress(username));
 			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("ratikanta@sdrc.co.in"));
-			message.setSubject("Testing Subject");
-			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!");
-
+				InternetAddress.parse(toEmailId));
+			message.setSubject(subject);
+			message.setText(body);
 			Transport.send(message);
-
-			System.out.println("Done");
+			System.out.println("Email sent");
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
+		}
+		}catch(Exception e){
+			System.out.println("Could not send email " + e.getMessage());
 		}
 	}
 
