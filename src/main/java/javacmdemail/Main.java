@@ -1,4 +1,5 @@
 package javacmdemail;
+import java.io.FileReader;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -8,6 +9,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 
 public class Main {
@@ -21,20 +25,22 @@ public class Main {
 		String subject = null;
 		String body = null;
 		try{
-			String[] inputArray = args[0].split("#"); 
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(new FileReader(args[0]));
+
+            JSONObject jsonObject = (JSONObject) obj;
 			
-			fromUsername = inputArray[0];
-			password = inputArray[1];
-			toEmailId = inputArray[2];
-			subject = inputArray[3];
-			body = inputArray[4];
+			fromUsername = (String) jsonObject.get("fromUsername");
+			password = (String) jsonObject.get("password");
+			toEmailId = (String) jsonObject.get("toEmailId");
+			subject = (String) jsonObject.get("subject");
+			body = (String) jsonObject.get("body");
 		
 			Main main = new Main();
 			main.sendMail(fromUsername, password, toEmailId, subject, body);
 			
 		}catch(Exception e){
 			System.out.println("Invalid input " + e.getMessage());
-
 		}	
 		
 	}
