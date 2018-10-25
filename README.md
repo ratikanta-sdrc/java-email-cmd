@@ -18,19 +18,21 @@ mvn clean compile assembly:single
 mvn exec:java -Dexec.mainClass="javacmdemail.Main" -s "C:\apache-maven-3.3.3\conf\settings.xml"
 ```
 
-Here _-Dexec.mainClass_ is main class of your java project. Please give fully qualified(with package) class name.
+Here _-Dexec.mainClass_ is main class of your java project. Give fully qualified(with package) class name.
 
-After _-s_ give path to `settings.xml`.
+After _-s_ give path to maven `settings.xml`.
 
 Executable jar file will be generated in the `target` folder.
 
 Make a json file like the following `javacmdemail.json` (name can be anything).
 
+Can sent email to multiple id. The ids should be separated by comma. 
+
 ```shell
 {
 	"fromUsername": "abc@gmail.com",
 	"password": "abc@123",
-	"toEmailId": "ratikanta@sdrc.co.in",
+	"toEmailId": "ratikanta@sdrc.co.in, anirudha@sdrc.co.in",
 	"subject": "Test subject",
 	"body": "Test body"
 }
