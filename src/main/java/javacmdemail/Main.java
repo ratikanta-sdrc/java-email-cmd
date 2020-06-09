@@ -2,13 +2,20 @@ package javacmdemail;
 import java.io.FileReader;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,7 +35,9 @@ public class Main {
 			, (String) jsonObject.get("password")
 			, (String) jsonObject.get("toEmailId")
 			, (String) jsonObject.get("subject")
-			, (String) jsonObject.get("body"));
+			, (String) jsonObject.get("body")
+			, (String) jsonObject.get("attachmentPath")
+			, (String) jsonObject.get("attachmentName"));
 			
 		}catch(Exception e){
 			System.out.println("Invalid input " + e.getMessage());
@@ -36,7 +45,7 @@ public class Main {
 		
 	}
 	
-	void sendMail(String fromUsername, String fromUserPassword, String toEmailId, String subject, String body){
+	void sendMail(String fromUsername, String fromUserPassword, String toEmailId, String subject, String body, String attachmentPath, String attachmentName){
 		
 		try{
 			final String username = fromUsername;
@@ -62,7 +71,29 @@ public class Main {
 				message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(toEmailId));
 				message.setSubject(subject);
-				message.setText(body);
+				
+				
+				
+				// for attaching files and send it through email	
+					
+				BodyPart messageBodyPart = new MimeBodyPart();
+				messageBodyPart.setContent(body,"text/html");
+				Multipart multipart = new MimeMultipart();
+				multipart.addBodyPart(messageBodyPart);
+				
+				
+				messageBodyPart = new MimeBodyPart();
+				String filename =  attachmentPath + attachmentName;
+				DataSource source = new FileDataSource(filename);
+				messageBodyPart.setDataHandler(new DataHandler(source));
+				messageBodyPart.setFileName(attachmentName);
+				multipart.addBodyPart(messageBodyPart);
+				
+				message.setContent(multipart);
+					
+				
+				
+				
 				Transport.send(message);
 				System.out.println("Email sent");
 
