@@ -28,20 +28,24 @@ Make a json file like the following `javacmdemail.json` (name can be anything).
 
 Can sent email to multiple id. The ids should be separated by comma. 
 
+Can sent email with one attachment.
+
 ```shell
 {
 	"fromUsername": "abc@gmail.com",
 	"password": "abc@123",
 	"toEmailId": "ratikanta@sdrc.co.in, anirudha@sdrc.co.in",
 	"subject": "Test subject",
-	"body": "Test body"
+	"body": "Test body",
+    "attachmentPath": "/Users/SDRC-PROD/projects/TED/",
+    "attachmentName": "TED-09-jun-2020-1933.backup"
 }
 ```
 
 Run it like the following command to send email with json file as parameter.
 
 ```shell
-java -jar javacmdemail-1.0.0-jar-with-dependencies.jar "d:/ratikanta/json/java cmd/javacmdemail.json"
+java -jar javacmdemail-1.1.0-jar-with-dependencies.jar "d:/ratikanta/json/java/javacmdemail.json"
 ```
 
 Here, the parameter is the json file where the input data(from email id, password, to email id etc) is present 
